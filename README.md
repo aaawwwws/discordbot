@@ -1,2 +1,2 @@
-ただDiscordbot作ってみたかっただけ
+ただDiscordbot作ってみたかっただけ<br>
 FFLogsをスクショしてdiscordに上げてるだけ
