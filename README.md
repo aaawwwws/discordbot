@@ -1,3 +1,4 @@
 ただDiscordbot作ってみたかっただけ<br>
 FFLogsをスクショしてdiscordに上げてるだけ<br>
-呼び出し方としては"Servername/Firstname Lastname"
+呼び出し方としては"Servername/Firstname Lastname"<br>
+例:Asura/aaaa aaaa
