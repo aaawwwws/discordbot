@@ -65,16 +65,15 @@ const scraping = async (server, first_name, second_name) => {
     ).jsonValue();
 
     if (Character_data === error) {
-      await page.waitForSelector("p");
-      await browser.close();
+      browser.close();
       throw "キャラクターが存在しません。";
+    } else {
+      await page.waitForSelector("#top-box");
+
+      await page.screenshot({ path: "./screenshot.png" });
+
+      await browser.close();
     }
-
-    await page.waitForSelector("#top-box");
-
-    await page.screenshot({ path: "./screenshot.png" });
-
-    await browser.close();
   };
   await main(server, first_name, second_name);
 };
