@@ -1,6 +1,6 @@
 {
-  "name": "discordbot Beta",
-  "version": "0.3",
+  "name": "discordbot",
+  "version": "1.0",
   "description": "discord bot ",
   "main": "index.js",
   "scripts": {
