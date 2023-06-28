@@ -115,5 +115,6 @@ const Total_func = async (msg) => {
   }
 };
 
+//こいつのコールバック関数関数の第一引数にコメントが入るから全部の関数に"msg"を指定してることを忘れるな
 client.on("messageCreate", Total_func);
 client.login(token.Key);
