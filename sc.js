@@ -47,26 +47,36 @@ const scraping = async (server, first_name, second_name) => {
   });
   //メインの処理
   const main = async (server, first_name, second_name) => {
-    try {
-      const page = await browser.newPage();
-      const url =
-        "https://ja.fflogs.com/character/jp/" +
-        server +
-        "/" +
-        first_name +
-        " " +
-        second_name;
-      await page.goto(url);
+    const error =
+      "指定された地域とサーバーにその名前が見つかりませんでした。 このキャラクターはまだ登録されていない可能性があります。";
+    const page = await browser.newPage();
+    const url =
+      "https://ja.fflogs.com/character/jp/" +
+      server +
+      "/" +
+      first_name +
+      " " +
+      second_name;
+    await page.goto(url);
+    //キャラクターが存在しないときのエラーをpタグで検知する。
+    var p_tag = await page.$("p");
+    var Character_data = await (
+      await p_tag.getProperty("textContent")
+    ).jsonValue();
 
-      await page.waitForSelector("#top-box");
-
-      await page.screenshot({ path: "./screenshot.png" });
-
+    if (Character_data === error) {
+      await page.waitForSelector("p");
       await browser.close();
-    } catch (e) {
-      console.log(e);
+      throw "キャラクターが存在しません。";
     }
+
+    await page.waitForSelector("#top-box");
+
+    await page.screenshot({ path: "./screenshot.png" });
+
+    await browser.close();
   };
   await main(server, first_name, second_name);
 };
+
 module.exports = scraping;
