@@ -75,7 +75,7 @@ const main = async (msg) => {
   } else if (Comment_Server === false) {
     throw "サーバーが見つかりません";
   } else {
-    throw "なんか違います";
+    return;
   }
 };
 
@@ -94,8 +94,16 @@ const Total_func = async (msg) => {
     // bot自身を無視
     if (msg.author.id === client.user.id) return;
     // logsチャンネル以外の発言を無視する
-    if (msg.channel.name === "logs") {
+    if (
+      msg.channel.name === "logs" &&
+      msg.content.includes("/") &&
+      msg.content.includes(" ")
+    ) {
       await main(msg);
+    } else if (msg.channel.name === "logs" && !msg.content.includes("/")) {
+      throw "「/」が入力されていません。";
+    } else if (msg.channel.name === "logs" && !msg.content.includes(" ")) {
+      throw "なにかしらの表記がおかしいです";
     } else {
       return;
     }
