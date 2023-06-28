@@ -12,64 +12,84 @@ const scraping = require("./sc.js");
 const token = require("./token.json");
 // サーバー一覧　別ファイルにするかも
 const ServerLists = [
-  "Aegis",
-  "Atomos",
-  "Carbuncle",
-  "Garuda",
-  "Gungnir",
-  "Kujata",
-  "Tonberry",
-  "Typhon",
-  "Alexander",
-  "Bahamut",
-  "Durandal",
-  "Fenrir",
-  "Ifrit",
-  "Ridill",
-  "Tiamat",
-  "Ultima",
-  "Anima",
-  "Asura",
-  "Chocobo",
-  "Hades",
-  "Ixion",
-  "Masamune",
-  "Pandaemonium",
-  "Titan",
-  "Belias",
-  "Mandragora",
-  "Ramuh",
-  "Shinryu",
-  "Unicorn",
-  "Valefor",
-  "Yojimbo",
-  "Zeromus",
+  "AEGIS",
+  "ATOMOS",
+  "CARBUNCLE",
+  "GARUDA",
+  "GUNGNIR",
+  "KUJATA",
+  "TONBERRY",
+  "TYPHON",
+  "ALEXANDER",
+  "BAHAMUT",
+  "DURANDAL",
+  "FENRIR",
+  "IFRIT",
+  "RIDILL",
+  "TIAMAT",
+  "ULTIMA",
+  "ANIMA",
+  "ASURA",
+  "CHOCOBO",
+  "HADES",
+  "IXION",
+  "MASAMUNE",
+  "PANDAEMONIUM",
+  "TITAN",
+  "BELIAS",
+  "MANDRAGORA",
+  "RAMUH",
+  "SHINRYU",
+  "UNICORN",
+  "VALEFOR",
+  "YOJIMBO",
+  "ZEROMUS",
 ];
+
 client.once("ready", () => {
   console.log("起");
 });
 
+// 大文字小文字を区別しない
+
 client.on("messageCreate", async (msg) => {
   //自信の発言を無視する
   if (msg.author.id === client.user.id) return;
-  //logsチャンネルでしか動作させない
   if (msg.channel.name === "logs") {
-    if (ServerLists.includes(msg.content)) {
-      // /でコメントを分ける
+    // /でコメントを分ける　サーバーのみを取得
+    try {
       const test = msg.content.split("/");
-      const server = test[0];
-      const name = test[1];
-      //sc.jsを見てください。
-      await scraping(server, name);
-      // 返信
-      await msg.reply({ files: ["./screenshot.png"] });
-      // 最後にファイルを削除する
-      try {
-        fs.unlinkSync("./screenshot.png");
-        console.log("削除しました。");
-      } catch (error) {
-        throw error;
+      //大文字小文字区別なし
+      const server = String(test[0].toUpperCase());
+      //名前だけ切り取り
+      const full_name = test[1].toUpperCase();
+      const name_array = full_name.split(/[\s]/);
+      const first_name = name_array[0];
+      const second_name = name_array[1];
+
+      //これでサーバーがリスト内にあるかどうか取れる
+      const Comment_Server = ServerLists.includes(server);
+      // 入力された内容がサーバー名がサーバーリストに含まれるか、名前がちゃんとファーストネームセカンドネームに分かれてて英文字かどうかを判定
+      if (
+        Comment_Server &&
+        first_name.search(/^[A-Za-z\s]+$/) === 0 &&
+        second_name.search(/^[A-Za-z\s]+$/) === 0
+      ) {
+        // sc.jsを見てください。
+        await scraping(server, first_name, second_name);
+        // 返信
+        await msg.reply({ files: ["./screenshot.png"] });
+        // 最後にファイルを削除する
+        try {
+          fs.unlinkSync("./screenshot.png");
+          console.log("削除しました。");
+        } catch (error) {
+          throw error;
+        }
       }
+      //エラー処理
+    } catch (e) {
+      await msg.reply("意味がわかりません");
     }
   }
 });
