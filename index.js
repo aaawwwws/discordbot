@@ -72,6 +72,14 @@ const main = async (msg) => {
     await scraping(server, first_name, second_name);
     // 返信
     await msg.reply({ files: ["./screenshot.png"] });
+    await msg.reply(
+      "https://ja.fflogs.com/character/jp/" +
+        server +
+        "/" +
+        first_name +
+        "%20" +
+        second_name
+    );
   } else if (Comment_Server === false) {
     throw "サーバーが見つかりません";
   } else {
@@ -84,8 +92,8 @@ const Image_File = async () => {
   try {
     fs.unlinkSync("./screenshot.png");
     console.log("削除しました。");
-  } catch (error) {
-    throw error;
+  } catch {
+    throw "ファイルが見つかりませんでした";
   }
 };
 
@@ -99,6 +107,7 @@ const Total_func = async (msg) => {
       msg.content.includes("/") &&
       msg.content.includes(" ")
     ) {
+      //メッセージが正しい場合メイン処理を実行それ以外は弾く
       await main(msg);
     } else if (msg.channel.name === "logs" && !msg.content.includes("/")) {
       throw "「/」が入力されていません。";

@@ -55,7 +55,7 @@ const scraping = async (server, first_name, second_name) => {
       server +
       "/" +
       first_name +
-      " " +
+      "%20" +
       second_name;
     await page.goto(url);
     //キャラクターが存在しないときのエラーをpタグで検知する。
